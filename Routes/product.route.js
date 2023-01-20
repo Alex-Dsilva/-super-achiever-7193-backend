@@ -31,7 +31,7 @@ ProductRouter.patch("/update/:id",async(req,res)=>{
     const {id}=req.params
     const payload=req.body
     try{
-        await PostModel.findByIdAndUpdate({_id:id},payload,{new:true, runValidators:true, useFindAndModify:false})
+        await ProductModel.findByIdAndUpdate({_id:id},payload,{new:true, runValidators:true, useFindAndModify:false})
         res.send(`post upadted with the id ${id}`)
     }
     catch(err){

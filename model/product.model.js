@@ -6,7 +6,7 @@ const ProductSchema= mongoose.Schema({
     description:{type:String, required:[true,"please enter product description"]},
     price:{type:Number, required:[true,"Please enter product"], maxlength:[7,"Price cannot exceed 7 characters"]},
     rating:{type:Number, default:0},
-    galleryImages:[{public_id:{type:String, required:true}, url:{type:String, required:true}}],
+    images:[{public_id:{type:String, required:true}, url:{type:String, required:true}}],
     productCategory:{type:String,required:[true,"Please enter product Category"]},
     stock:{type:Number, required:[true, "Please enter product Stock"], maxlength:[7,"Price cannot exceed 7 characters"], default:1},
     ratingCount:{type:Number,default:0},

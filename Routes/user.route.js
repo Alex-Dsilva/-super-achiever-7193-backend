@@ -62,4 +62,15 @@ UserRouter.post("/login",async (req,res)=>{
     }
 })
 
+UserRouter.post("/logout",async (req,res)=>{
+    res.setHeader('Set-Cookie', cookie.serialize('token', null, {
+        httpOnly: true,
+        maxAge: new Date(Date.now())
+        }));
+    res.send({message:"Logged Out"})
+            
+             
+   
+})
+
 module.exports={UserRouter}

@@ -1,13 +1,14 @@
 const cookie = require('cookie')
 
 const auth=(req,res,next)=>{
-    const token = cookie.parse(req.headers.cookie || '')
-    if(token){
+    const {token} = cookie.parse(req.headers.cookie )
 
-        next()
+    if(token==="null"){
+        res.send("please login")  
     }
     else{
-        res.send("please login")
+        next()
+        
     }
 }
 
