@@ -35,7 +35,8 @@ ProductRouter.patch("/update/:id",async(req,res)=>{
         res.send(`post upadted with the id ${id}`)
     }
     catch(err){
-        console.log(err)
+        console.log(err);
+
         res.send("something wrong while updating your posts")
     }
 

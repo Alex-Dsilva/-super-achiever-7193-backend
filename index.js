@@ -1,6 +1,8 @@
 const express = require("express")
-const {connection} = require("./config/db")
-const{ProductRouter}=require("./Routes/product.route")
+const {connection} = require("./config/db");
+const { UserRouter } = require("./Routes/user.route");
+const{ProductRouter}=require("./Routes/product.route");
+const{auth}=require("./middleware/auth")
 require("dotenv").config()
 const app=express();
 app.use(express.json())
@@ -11,8 +13,10 @@ app.get("/",(req,res)=>{
     res.send("welcome")
 }) 
 
+// app.use()
+app.use("/users",UserRouter)
 
-app.use("/product",ProductRouter)
+app.use("/product",auth,ProductRouter)
 
 
 app.listen(process.env.port,async()=>{
