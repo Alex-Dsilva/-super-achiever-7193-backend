@@ -19,7 +19,8 @@ ProductRouter.post("/add", async (req, res) => {
 
 ProductRouter.get("/", async (req, res) => {
      try {
-          console.log(req.body);
+          console.log("query", req.query);
+          console.log("params", req.params);
           let {
                productname,
                productBrand,
@@ -28,7 +29,12 @@ ProductRouter.get("/", async (req, res) => {
                limit = 50,
                page = 1,
           } = req.query;
+          if (productBrand !== undefined) {
+               productBrand = productBrand.toString();
+          }
+          console.log("productBrand", productBrand);
           let queries = {};
+
           if (
                productname === undefined &&
                productBrand === undefined &&
