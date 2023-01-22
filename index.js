@@ -22,7 +22,7 @@ app.use("/product", ProductRouter);
 app.listen(process.env.port, async () => {
      try {
           await connection;
-        //   await addBulkDataManually();
+          // await addBulkDataManually();
           console.log("connected to db");
      } catch (err) {
           console.log(err);
