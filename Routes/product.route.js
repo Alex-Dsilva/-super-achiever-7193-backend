@@ -1,9 +1,10 @@
 const express = require("express");
+const {checkRole}=require("../middleware/checkrole")
 const { products } = require("../constants/data");
 const { ProductModel } = require("../model/product.model");
 const ProductRouter = express.Router();
 
-ProductRouter.post("/add", async (req, res) => {
+ProductRouter.post("/add", checkRole,  async (req, res) => {
      const data = req.body;
      try {
           const user = new ProductModel(data);
@@ -86,7 +87,7 @@ ProductRouter.get("/singleProduct/:id", async (req, res) => {
      }
 });
 
-ProductRouter.patch("/update/:id", async (req, res) => {
+ProductRouter.patch("/update/:id", checkRole, async (req, res) => {
      const { id } = req.params;
      const payload = req.body;
      try {
@@ -102,6 +103,85 @@ ProductRouter.patch("/update/:id", async (req, res) => {
           res.status(404).send({ msg: "FAILED TO UPDATE THE DATA" });
      }
 });
+
+ProductRouter.delete("/delete/:id",checkRole, async(req,res)=>{
+    const {id}=req.params
+    const payload=req.body
+    try{
+        await ProductModel.findByIdAndDelete({_id:id})
+        res.send(`product deleted with the id ${id}`)
+    }
+    catch(err){
+        console.log(err);
+
+        res.send("something wrong while updating your product")
+    }
+
+})
+
+ProductRouter.put("/createProductReviwe/:id", async(req,res)=>{
+    const {id}=req.params
+    const {rating, comment, productId, user_id, username}=req.body
+    const review ={
+        user:user_id,
+        name:username,
+        rating:Number(rating),
+        comment,
+    }
+    
+    try{
+        const product =await ProductModel.findById(productId)
+
+        const isReviewed=product.reviews.find(el=>el.user.toString()===user_id.toString())
+        if(isReviewed){
+           product.reviews.forEach(el => {
+            if(el.user.toString()===user_id.toString()){
+                (el.rating=rating),
+                (el.comment=comment)
+            }
+           });
+        }else{
+            product.reviews.push(review)
+            product.ratingCount=product.reviews.length
+        }
+
+        let avg=0;
+        product.reviews.forEach(rev=>{
+            avg+=rev.rating
+        })
+        product.rating=avg/product.reviews.length
+
+        await product.save({validateBeforeSave:false})
+        res.send(`Thank you for your Valuble Feedback`)
+    }
+    catch(err){
+        console.log(err);
+
+        res.send("something wrong while adding your reviwe")
+    }
+
+})
+
+
+ProductRouter.get("productReviews/:id", async (req, res) => {
+    const { id } = req.params;
+    try {
+         const product = await ProductModel.findById({ _id: id });
+
+         if(!product){
+            res.send({"msg":"Error while getting the reviews"})
+         }
+         res.send({reviews:product.reviews})
+    } catch (err) {
+         console.log(err);
+         res.send({
+              msg: "something wrong while getting products",
+         });
+    }
+});
+
+
+
 const addBulkDataManually = async () => {
      try {
           await ProductModel.insertMany(products);
@@ -111,4 +191,6 @@ const addBulkDataManually = async () => {
      }
 };
 
-module.exports = { ProductRouter, addBulkDataManually };
+module.exports = { ProductRouter, addBulkDataManually};
+
+

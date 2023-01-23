@@ -46,6 +46,11 @@ const ProductSchema = mongoose.Schema({
      discountPercent: { type: Number, default: 20 },
      reviews: [
           {
+                user:{
+                    type: mongoose.Schema.Types.ObjectId,
+                    ref:"User",
+                    required:true
+                },
                name: {
                     type: String,
                     required: true,
