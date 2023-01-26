@@ -26,9 +26,10 @@ ProductRouter.get("/", async (req, res) => {
                productname,
                productBrand,
                productCategory,
-               sortBy,
-               limit = 50,
-               page = 1,
+               sortBy, 
+               sortOrder,
+               limit = 10,
+               page,
           } = req.query;
           if (productBrand !== undefined) {
                productBrand = productBrand.toString();
@@ -57,12 +58,19 @@ ProductRouter.get("/", async (req, res) => {
 
           let sorting = {};
           if (sortBy != undefined) {
-               sorting[sortBy] = 1;
+               if(sortOrder==="asc"){
+                    sorting[sortBy] =1  
+               }else{
+                    sorting[sortBy] = -1;
+               }
+               
+          }else{
+               sorting["rating"] =-1 
           }
 
-          let products = await ProductModel.find(queries)
-               .sort(sorting)
-               .skip((page - 1) * limit)
+
+          let products = await ProductModel.find(queries).sort(sorting)
+               .skip((page||1 - 1) * limit)
                .limit(limit);
           const totalCount = products?.length;
           res.status(200).json({ data: products, totalCount });

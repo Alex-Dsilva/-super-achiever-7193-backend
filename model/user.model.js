@@ -4,7 +4,7 @@ const valiator=require("validator");
 const UserSchema= mongoose.Schema({
     name:{type:String, required:[true,"Please enter your name"]},
     email:{type:String, required:[true,"Please enter your Email"], unique:true, validator:[valiator.isEmail,"Please Enter a valid Email"] },
-    password:{type:String, required:[true,"Please enter your password"],minLength:[8,"Password should be greater then 8 characters"]},
+    password:{type:String, required:[true,"Please enter your password"],minLength:[8,"Password should be greater then 8 characters"], select:false,},
     avatar:{
         public_id:{
             type:String,

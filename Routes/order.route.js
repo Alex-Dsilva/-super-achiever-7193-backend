@@ -139,7 +139,7 @@ OrderRouter.put("/updateStock", async(req,res)=>{
 
 })
 
-OrderRouter.delete("/deleteOrder", async(req,res)=>{
+OrderRouter.delete("/deleteOrder/:id", async(req,res)=>{
 
     try {
         const order = await Order.findById(req.params.id);
